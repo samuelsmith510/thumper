@@ -12,6 +12,7 @@
 #include <sys/ipc.h> 
 #include <sys/shm.h> 
 #include <sys/wait.h>
+#include <sys/un.h>
 
 #define FILE_READ_CHUNK 1024
 #define SHM_SIZE 65536
@@ -73,6 +74,35 @@ void LOG(const char* format, ...) {
 #endif
 
 int tcp_socket;
+
+void setup_uds_connection(const char* port) {
+  struct sockaddr_un remote;
+  char* server_path;
+
+  server_path = (char*) malloc(512);
+
+  memset(server_path, 0, 256);
+  
+  memset(&remote, 0, sizeof(struct sockaddr_un));
+  tcp_socket = socket(PF_UNIX, SOCK_STREAM, 0);
+  if (tcp_socket == -1) {
+    printf("SOCKET ERROR = %d\n", errno);
+    exit(1);
+  }
+  remote.sun_family = AF_UNIX;
+  strcat(server_path, "/tmp/kelinci-run");
+  strcat(server_path, port);
+  strcat(server_path, ".sock");
+  strcpy(remote.sun_path, server_path);
+
+  if(connect(tcp_socket, 
+      (struct sockaddr *) &remote, 
+      sizeof(struct sockaddr_un)) != 0) {
+    printf("connect() failed\n");
+ }
+
+
+}
 
 /* Set up the TCP connection */
 void setup_tcp_connection(const char* hostname, const char* port) {
@@ -227,18 +257,21 @@ int main(int argc, char** argv) {
   char buf[FILE_READ_CHUNK];
   FILE *file;
   uint8_t conf = STATUS_DONE;
+  int bytes_sent = 0;
 
   // try up to MAX_TRIES time to communicate with the server
   do {
     // if this is not the first try, sleep for 0.1 seconds first
-    if(try > 0)
-      usleep(100000);
-
-    setup_tcp_connection(server, port);
+    /*
+    if(try > 0) 
+     usleep(100000);
+    */
+    /* setup_tcp_connection(server, port); */
+    setup_uds_connection(port);
 
     /* Send mode */
-    write(tcp_socket, &mode, 1);
-
+    bytes_sent = write(tcp_socket, &mode, 1);
+    printf("first write, sent %d bytes with errno %d\n", bytes_sent, errno);
     /* LOCAL MODE */
     if (mode == LOCAL_MODE) {
 
@@ -248,8 +281,10 @@ int main(int argc, char** argv) {
 
       // send path length
       int pathlen = strlen(path);
-      if (write(tcp_socket, &pathlen, 4) != 4) {
-        DIE("Error sending path length");
+      bytes_sent = write(tcp_socket, &pathlen, 4);
+      if (bytes_sent != 4) {
+	printf("only got %d bytes %d\n",  bytes_sent, errno);
+        DIE("Error sending path length\n");
       }
       LOG("Sent path length: %d\n", pathlen);
 
