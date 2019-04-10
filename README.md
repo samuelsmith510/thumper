@@ -12,6 +12,16 @@ Kelinci has identified bugs related to JPEG parsing in OpenJDK (versions 6-9) an
 - http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8188756
 - https://issues.apache.org/jira/browse/IMAGING-203
 
+### This Forkin Repo ###
+On this particular repository, I modified the code to run much faster, but has a couple limitations.  
+
+First, there seems to be issues with executions dropping down to 50/second.  To avoid this, I recommend wrapping 
+the script to run the Java component with the following command:
+```while true; do timeout -k 1 10 java -cp YOUR_CLASSPATH edu.cmu.sv.kelinci.Kelinci -v 0 YOUR_CLASS @@; done```
+
+Also, there is no longer the ability to run remote.  If you want to run remote, you'll have to modify the Java/C components to allow the option again.  
+
+
 ### Installation ###
 
 The application has two components. First, there is a C application that acts as the target application for AFL.
