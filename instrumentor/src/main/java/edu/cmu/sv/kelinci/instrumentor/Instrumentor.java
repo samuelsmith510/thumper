@@ -87,7 +87,6 @@ public class Instrumentor {
 		String[] resources = {
 				"edu/cmu/sv/kelinci/Kelinci.class",
 				"edu/cmu/sv/kelinci/Kelinci$1.class",
-				"edu/cmu/sv/kelinci/Kelinci$2.class",
 				"edu/cmu/sv/kelinci/Kelinci$ApplicationCall.class",
 				"edu/cmu/sv/kelinci/Kelinci$FuzzRequest.class",
 				"edu/cmu/sv/kelinci/Kelinci$NullOutputStream.class",
