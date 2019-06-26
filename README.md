@@ -88,6 +88,9 @@ The Java side is naturally parallelizable. Simply start an instance for every co
 
 For details on how to run AFL in parallel, please see the `parallel_fuzzing.txt` document that comes with it. You'll want to have as many afl-fuzz processes running as there are Java side Kelinci components, where each afl-fuzz process connects to a different Kelinci server. The Kelinci server to connect to can be specified using the `-s <server>` and `-p <port>` flags for `interface.c`.
 
-### Developer ###
+### Credit to Kelinci Developer ###
 
 Rody Kersten (rodykersten@gmail.com)
+
+# Thumper Developer / Maintainer #
+Sam Smith (samuel.smith510@gmail.com)
