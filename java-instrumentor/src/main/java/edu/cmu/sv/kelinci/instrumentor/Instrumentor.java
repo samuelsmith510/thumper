@@ -87,6 +87,7 @@ public class Instrumentor {
 		String[] resources = {
 				"edu/cmu/sv/kelinci/Kelinci.class",
 				"edu/cmu/sv/kelinci/Kelinci$1.class",
+				"edu/cmu/sv/kelinci/Kelinci$2.class",
 				"edu/cmu/sv/kelinci/Kelinci$ApplicationCall.class",
 				"edu/cmu/sv/kelinci/Kelinci$FuzzRequest.class",
 				"edu/cmu/sv/kelinci/Kelinci$NullOutputStream.class",
@@ -130,7 +131,7 @@ public class Instrumentor {
 	private static void loadAndWriteResource(String resource) {
 		InputStream is = classloader.getResourceAsStream(resource);
 		if (is == null) {
-			System.err.println(String.format("Error loading Kelinci class for addition to output (Hint: Did you modify the Kelinci class and not modify the Instrumentor.java resources list?): %s", resource));
+			System.err.println("Error loading Kelinci classes for addition to output");
 			return;
 		}
 		byte[] rbytes;

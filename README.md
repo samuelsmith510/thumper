@@ -1,19 +1,14 @@
 # README #
 
-Interface to run AFL on Java programs.
+Thumper is a project that provides further accessibility for fuzzing targets with AFL.  This is currently in a development stage.  The original code is based on Kelinci written by Rody Kersten, but Thumper is larger than just providing Java fuzzing with AFL, and is currently being developed to provide fuzzing on Hypervisors where gathering code coverage and test data is currently difficult.  Additionally, Thumper will likely modify AFL to provide a faster low level socket interface, instead of using a shim binary as it does today.  
 
-Kelinci means rabbit in Indonesian (the language spoken on Java). 
 
-This README assumes that AFL has been previously installed. For information on how to install and use AFL, please see <http://lcamtuf.coredump.cx/afl/>. Kelinci has been tested successfully with AFL versions 2.44 and newer. The README explains how to use the tool. For technical background, please see the CCS'17 paper in the 'docs' directory. 
+## Java Fuzzing ##
+Thumper provides Java fuzzing through the combination of the fuzzerside and instrumentation directories.  This is mostly provided through the capabilities provided by Kelinci, but has provided optimizations to the fuzzing model tha tprovides up to a 100x speedup in some cases.  However, this is still under development and has its quirks.  
 
-Several examples are provided in the 'examples' directory, where each comes with a README specifying the exact steps to take in order to repeat the experiment.
 
-Kelinci has identified bugs related to JPEG parsing in OpenJDK (versions 6-9) and Apache Commons Imaging 1.0 RC7. Both are included in the provided examples. These are the bug reports:
-- http://bugs.java.com/bugdatabase/view_bug.do?bug_id=JDK-8188756
-- https://issues.apache.org/jira/browse/IMAGING-203
-
-### This Forkin Repo ###
-On this particular repository, I modified the code to run much faster, but has a couple limitations.  
+### Known Issues Regressions from Kelinci ###
+On this particular repository, I modified the code to run much faster, but has a couple limitations.
 
 First, there seems to be issues with executions dropping down to 50/second.  To avoid this, I recommend wrapping 
 the script to run the Java component with the following command:
